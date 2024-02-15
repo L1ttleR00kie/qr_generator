@@ -1,10 +1,13 @@
 <template>
   <div>
+    <div class="flex item-center justify-between py-2">
     <select_file v-model="file" @update:modelValue="handleFileChange"/>
-    <download_zip :qrDataUrls="qrDataUrls" :file="file" :qrGetName="qrGetName"/>
-    <div v-if="qrDataUrls.length > 0" class="row-container">
-      <div v-for="(qrDataURL, index) in qrDataUrls" :key="index">
-        <img :src="qrDataURL" alt="QR Code" />
+    <background_image v-model="image" @update:modelValue="handleImageChange"/>
+    <download_zip :qrDataUrls="qrDataUrls" :file="file" :qrGetName="qrGetName"/></div>
+    <div class="flex flex-wrap">
+      <div v-for="(qrDataURL, index) in qrDataUrls" :key="index" class="box-border w-50 p-5">
+        <img :src="qrDataURL" alt="QR Code" class="w-20" />
+        <img :src="backgroundImage" alt="Background Image">
       </div>
     </div>
   </div>
@@ -14,14 +17,17 @@
 import { ref } from 'vue'
 import select_file from './select_file.vue'
 import download_zip from './download_zip.vue'
+import background_image from './background_image.vue';
 import QRCode from 'qrcode'
 import * as XLSX from 'xlsx'
 
 
-
+const blue = ref('blue')
+const trigger = ref(true)
 const file = ref(null)
 const qrDataUrls = ref([])
 const qrGetName = ref([])
+const image = ref(null);
 
 const handleFileChange = async (file) => {
   if (!file) {
@@ -60,11 +66,11 @@ const generateQRCodeForEachEntry = async (dataEntries) => {
     console.error('Error generating QR codes:', error);
   }
 }
-</script>
 
-<style>
-.row-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-</style>
+const backgroundImage = ref(null);
+
+  const handleImageChange = (image) => {
+    backgroundImage.value = image;
+    return backgroundImage
+  };
+</script>
