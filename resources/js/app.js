@@ -2,6 +2,6 @@ import './bootstrap';
 
 import {createApp} from 'vue';
 
-import App from './components/Generate_qr.vue';
+import App from './components/testing.vue';
 
 createApp(App).mount("#app");

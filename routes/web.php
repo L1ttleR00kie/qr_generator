@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\BackgroundImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.app');
-});
+Route::get('/', [ImageController::class, 'index']);
+Route::post('/upload', [ImageController::class, 'upload'])->name('upload');
+Route::post('/api/save-background-image', [BackgroundImageController::class, 'store']);
+Route::get('/your-data', [BackgroundImageController::class, 'getData'])->name('getData');

@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown">
-    <button class="flex justify-items-center mr-3 mt-2 gap-2 bg-blue-300 hover:bg-blue-700 p-3 rounded-lg shadow-sm text-white"
+    <button class="flex justify-items-center ml-2 mr-3 mt-1 gap-2 bg-blue-300 hover:bg-blue-700 p-3 rounded-lg shadow-sm text-white"
       @click="toggleDropdown">Download<svg class="w-6 text-white h-6 text-gray-800 dark:text-white" aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

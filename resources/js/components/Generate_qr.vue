@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div class="flex item-center justify-between py-2">
-    <select_file v-model="file" @update:modelValue="handleFileChange"/>
-    <background_image v-model="image" @update:modelValue="handleImageChange"/>
-    <download_zip :qrDataUrls="qrDataUrls" :file="file" :qrGetName="qrGetName"/></div>
-    <div class="flex flex-wrap">
-      <div v-for="(qrDataURL, index) in qrDataUrls" :key="index" class="box-border w-50 p-5">
-        <img :src="qrDataURL" alt="QR Code" class="w-20" />
-        <img :src="backgroundImage" alt="Background Image">
+    <div class="flex flex-col items-center justify-center">
+      <div class="flex items-center justify-center w-full p-4">
+        <select_file v-model="file" @update:modelValue="handleFileChange"/>
+        <background_image v-model="image" @update:modelValue="handleImageChange"/>
+        <download_zip :qrDataUrls="qrDataUrls" :file="file" :qrGetName="qrGetName"/>
       </div>
-    </div>
+        <div class="flex flex-wrap">
+          <div v-for="(qrDataURL, index) in qrDataUrls" :key="index" class="box-border w-50 p-5">
+            <img :src="qrDataURL" alt="QR Code" class="w-20" />
+          </div>
+        </div>
+      </div>
+    
   </div>
 </template>
 
@@ -21,9 +24,6 @@ import background_image from './background_image.vue';
 import QRCode from 'qrcode'
 import * as XLSX from 'xlsx'
 
-
-const blue = ref('blue')
-const trigger = ref(true)
 const file = ref(null)
 const qrDataUrls = ref([])
 const qrGetName = ref([])

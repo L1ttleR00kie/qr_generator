@@ -9,11 +9,6 @@
               <p class="text-xs text-gray-500 text-white"><strong>Upload File</strong></p>
           </div>
           <input id="dropzone-file" type="file" class="hidden" @change="handleFileChange" />
-          <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700" >
-            <transition name="progress">
-              <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
-            </transition>
-          </div>
       </label>
       
     </div>
@@ -39,26 +34,5 @@ const handleFileChange = (e) => {
   }
 
   emits('update:modelValue', file);
-
-//   const formData = new FormData();
-//   formData.append('file', file);
-
-//   const xhr = new XMLHttpRequest();
-
-//   xhr.upload.addEventListener('progress', (event) => {
-//     if (event.lengthComputable) {
-//       const progress = (event.loaded / event.total) * 100;
-//       uploadProgress.value = progress;
-//     }
-//   });
-
-//   xhr.onreadystatechange = function() {
-//     if (xhr.readyState === 4 && xhr.status === 200) {
-//       emits('update:modelValue', file);
-//     }
-//   };
-
-//   xhr.open('POST', 'your_upload_endpoint', true);
-//   xhr.send(formData);
   }
 </script>
