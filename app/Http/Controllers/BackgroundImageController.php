@@ -31,14 +31,14 @@ class BackgroundImageController extends Controller
         // $imageUpload->path = '/storage/' . $file_path;
         // $imageUpload->save();
 
-        return response()->json(['message' => 'Background image saved successfully']);
+        return response()->json(['message' => 'Background image saved successfully', 'path' => $uploadedFile->store('/storage/' . $storagePath)]);
     }
 
-    public function getData()
+    public function getPath()
     {
         try {
             // Fetch data from the database
-            $image = Image::first();
+            $image = Image::orderBy('id', 'desc')->first();
 
             if ($image) {
                 // If an image exists, return its path

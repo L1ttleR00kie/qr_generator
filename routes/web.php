@@ -18,4 +18,5 @@ use App\Http\Controllers\BackgroundImageController;
 Route::get('/', [ImageController::class, 'index']);
 Route::post('/upload', [ImageController::class, 'upload'])->name('upload');
 Route::post('/api/save-background-image', [BackgroundImageController::class, 'store']);
-Route::get('/your-data', [BackgroundImageController::class, 'getData'])->name('getData');
+
+Route::get('/backgroundImage-path', [BackgroundImageController::class, 'getPath']);

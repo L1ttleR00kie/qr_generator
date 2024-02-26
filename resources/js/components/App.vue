@@ -23,8 +23,6 @@
                 <input type="file" @change="handleFileChange"/>
             </label>
         </div>
-
-        
         
     </main>
 </template>
