@@ -26,7 +26,6 @@ const uploadProgress = ref(0);
 
 const handleFileChange = (e) => {
   const file = e.target.files[0];
-
   const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'application/json'];
 
   if (!allowedTypes.includes(file.type)) {

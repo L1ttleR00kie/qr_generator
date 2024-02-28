@@ -76,7 +76,8 @@ const handleFileChange = async (file) => {
     const sheetName = workbook.SheetNames[0]
     const worksheet = workbook.Sheets[sheetName]
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-    generateQRCodeForEachEntry(jsonData.slice(1))
+    // console.log(jsonData);
+    generateQRCodeForEachEntry(jsonData)
   }
 
   fileReader.readAsArrayBuffer(file)
@@ -196,21 +197,22 @@ const downloadWithBackground = async () => {
       return;
     }
 
-    
-
-
-    
     const dpi = 96;
 
     const zip = new JSZip();
     let filesProcessed = 0;
     const totalFiles = qrData.value.length;
-
+    // console.log(qrData);
+    
     for (let i = 0; i < qrData.value.length; i++) {
       const qrCode = qrData.value[i];
-      if (qrCode) {
+      const qrName = qrGetName.value[i].replace(/[^\w\s]/gi, '')
+      // var desired = stringToReplace.replace(/[^\w\s]/gi, '')
+      if (qrCode, qrGetName) {
         const qrCodeElement = domToCapture.value.children[i];
+        // console.log(qrCodeElement)
         const canvas = await html2canvas(qrCodeElement);
+        
         const imageData = canvas.toDataURL('image/png');
 
         const widthInInches = imageWidth.value;
@@ -219,12 +221,26 @@ const downloadWithBackground = async () => {
 
         const image = new Image();
         image.src = imageData;
-
         image.width = widthInPixels;
 
-        const adjustedImageData = await getImageBase64(image);
 
-        zip.file(`captured_content_${i}.png`, adjustedImageData, { base64: true });
+        await (()=>{return new Promise((resolve)=>{
+          image.onload = ()=>{
+             resolve()
+          }
+        })
+        })()
+
+
+        const adjustedImageData = await getImageBase64(image);
+        console.log(adjustedImageData)
+        // qr
+
+
+        // zip.file(`captured_content_${i}.png`, adjustedImageData, { base64: true });
+      zip.file(`${qrName}.png`, adjustedImageData, { base64: true });
+
+
         filesProcessed++;
         downloadPercentage.value = Math.floor((filesProcessed / totalFiles) * 100);
         if (filesProcessed === totalFiles) {
@@ -233,15 +249,17 @@ const downloadWithBackground = async () => {
           });
         }
       }
+      
     }
-
+     
+    console.log("download")
     const content = await zip.generateAsync({ type: 'blob' });
-    const zipFile = new File([content], 'Captured_Content.zip', { type: 'application/zip' });
+    const zipFile = new File([content], 'QR_Code_With_Background.zip', { type: 'application/zip' });
 
     const url = URL.createObjectURL(zipFile);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'Captured_Content.zip');
+    link.setAttribute('download', 'QR_Code_With_Background.zip');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -256,7 +274,7 @@ const getImageBase64 = (image) => {
     const context = canvas.getContext('2d');
     let aspectRatio = document.querySelector(".domToCapture img[alt='Background']").getBoundingClientRect().width / image.width
     let h = document.querySelector(".domToCapture img[alt='Background']").getBoundingClientRect().height / aspectRatio
-
+    console.log(aspectRatio)
 
     canvas.width = image.width;
     // canvas.height = image.height;
@@ -280,7 +298,6 @@ const getImageBase64 = (image) => {
 </script>
 
 <style>
-
 
 .qr-code {
   position: absolute;

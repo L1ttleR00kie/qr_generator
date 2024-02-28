@@ -10,10 +10,10 @@
     <div v-if="showDropdown" id="dropdown" class="absolute right-0 z-10 mt-1 bg-white origin-top-right divide-y divide-gray-100 rounded-lg absolute shadow w-60 dark:bg-gray-700">
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
         <li>
-          <a href="javascript:void(0)" @click="downloadZip" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white border-b-[1.5px]">Download QR as zip file</a>
+          <button href="javascript:void(0)" @click="downloadZip" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white border-b-[1.5px]">Download QR Code Only</button>
         </li>
         <li>
-          <a href="javascript:void(0);" @click="downloadWithBackground" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Capture and Download</a>
+          <button href="javascript:void(0);" @click="downloadWithBackground" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Download with Background Image</button>
         </li>
 
       </ul>
@@ -22,54 +22,48 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 import JSZip from 'jszip';
 
 const props = defineProps({
   qrData: Array,
-  qrGetName: Object,
+  qrGetName: Array,
   file: Object,
 });
-
 
 const showDropdown = ref(false);
 
 const emits = defineEmits([
   "returnBackgroundImage"
-])
+]);
 
-const downloadWithBackground = () =>{
-  emits("returnBackgroundImage")
-}
-
-
-
-const toggleDropdown = () => {
-  showDropdown.value = !showDropdown.value;
+const downloadWithBackground = () => {
+  emits("returnBackgroundImage");
 };
 
 const downloadZip = async () => {
   try {
     const zip = new JSZip();
 
-
     props.qrData.forEach((qrDataURL, index) => {
-
-      const qrName = props.qrGetName[index];
-
+      const qrName = props.qrGetName[index].replace(/[^\w\s]/gi, '');
       zip.file(`${qrName}.png`, qrDataURL.split(',')[1], { base64: true });
     });
-
-
+    
     const content = await zip.generateAsync({ type: 'blob' });
 
     const a = document.createElement('a');
     a.href = URL.createObjectURL(content);
-    a.download = `qr_codes_${props.file.name}.zip`;
+    a.download = `QR_Codes.zip`;
     a.click();
+    
   } catch (error) {
     console.error('Error creating zip file:', error);
   }
+};
+
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value;
 };
 
 </script>
